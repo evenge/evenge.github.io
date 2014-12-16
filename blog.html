@@ -1,0 +1,17 @@
+---
+layout: page
+title: "Blog"
+description: "Blog"
+group: navigation
+---
+{% include JB/setup %}
+
+<h4>Entradas</h4>
+<ul class="posts">
+  {% for post in site.posts %}
+  <li>
+    <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a> <small>{{ post.date | date_to_string }}</small>
+    <br><p class="resume"> {{ post.description }} </p>
+  </li>
+  {% endfor %}
+</ul>

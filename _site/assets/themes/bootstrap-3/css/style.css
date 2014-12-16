@@ -15,13 +15,20 @@
 
 /* Jekyll Bootstrap Colors */
 h1, h2, h3, h4 {
-  color: #f22430;
+  color: #3a3a3a;
 }
 #footer {
   background-color: #fdcd60;
 }
 
+body a{
+  color: #b93d3d;
+}
 
+body a:hover {
+  color: #494949;
+  text-decoration: none;
+}
 
 /* posts index */
 .post > h3.title {

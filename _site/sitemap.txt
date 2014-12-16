@@ -1,12 +1,13 @@
 
-http://username.github.io/archive.html
-http://username.github.io/atom.xml
-http://username.github.io/categories.html
-http://username.github.io/index.html
-http://username.github.io/pages.html
-http://username.github.io/practicas.html
-http://username.github.io/rss.xml
-http://username.github.io/sitemap.txt
-http://username.github.io/tags.html
+http://evenge.github.io/archive.html
+http://evenge.github.io/atom.xml
+http://evenge.github.io/blog.html
+http://evenge.github.io/categories.html
+http://evenge.github.io/index.html
+http://evenge.github.io/pages.html
+http://evenge.github.io/rss.xml
+http://evenge.github.io/sitemap.txt
+http://evenge.github.io/tags.html
 
-http://username.github.io/lessons/2011/12/29/jekyll-introduction
+http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2
+http://evenge.github.io/general/2014/12/16/nos-decidimos-por-gae
