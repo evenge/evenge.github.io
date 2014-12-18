@@ -4,7 +4,7 @@
  <title>EVENGE</title>
  <link href="http://evenge.github.io/" rel="self"/>
  <link href="http://evenge.github.io"/>
- <updated>2014-12-16T23:25:50+01:00</updated>
+ <updated>2014-12-18T13:50:49+01:00</updated>
  <id>http://evenge.github.io</id>
  <author>
    <name>Evenge</name>
@@ -31,6 +31,161 @@ Como nosotros ibamos a programar en Python nos venia genial, porque ya viene int
 
 &lt;p&gt;Jinja2 basicamente es un motor de plantillas que incorpora todas las funciones de Python.
 Tiene soporte completo unicode, un entorno de ejecución y seguridad incorporada.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Test unitarios para python</title>
+   <link href="http://evenge.github.io/test/2014/12/16/test-unitarios-para-python"/>
+   <updated>2014-12-16T00:00:00+01:00</updated>
+   <id>http://evenge.github.io/test/2014/12/16/test-unitarios-para-python</id>
+   <content type="html">
+&lt;p&gt;Los test unitarios nos permiten realizar un testeo de nuestra aplicación web durante el desarrollo de los distintos módulos de una aplicación, que nos ayuda a testear el código, nos ayuda en el diseño del proyecto, así como la reutilización y mantenimiento del código. Todo ello a nivel local, sin la necesidad de desplegarla en App Engine.&lt;/p&gt;
+
+&lt;p&gt;Para ello hemos tomado como referencia:
+&lt;a href=&quot;https://cloud.google.com/appengine/docs/python/tools/localunittesting&quot;&gt;Local Unit Testing for Python&lt;/a&gt;.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Test</title>
+   <link href="http://evenge.github.io/test/2014/12/16/test"/>
+   <updated>2014-12-16T00:00:00+01:00</updated>
+   <id>http://evenge.github.io/test/2014/12/16/test</id>
+   <content type="html">
+&lt;p&gt;Tras mucha investigación de como hacer los test unitarios sobre nuestra aplicación en GAE, hemos conseguido realizarlos con éxito.  &lt;/p&gt;
+
+&lt;p&gt;Para ello hemos tenido que usar bastante información buscada por Internet, por lo que hemos tomado como referencia:  &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cloud.google.com/appengine/docs/python/tools/localunittesting&quot;&gt;Local Unit Testing for Python&lt;/a&gt;  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cloud.google.com/appengine/docs/python/tools/handlertesting&quot;&gt;Handler Testing For Python&lt;/a&gt;  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://docs.shippable.com/en/latest/&quot;&gt;API Shippable&lt;/a&gt;  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/9511887/webtest-for-google-app-engine&quot;&gt;Stackoverflow&lt;/a&gt;  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Nuestro test sirve para comprobar que nuestra apliacación se despliega correctamente y en caso de que sea así haga un “Deploy” de esta a GAE.&lt;/p&gt;
+
+&lt;p&gt;Para poder realizar este test, es necesario la configuración de 3 archivos que se deben de incorporar al repositorio del proyecto. Son los siguientes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/evenge/EVENGE/blob/master/requirements.txt&quot;&gt;requeriments.txt&lt;/a&gt;&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;nose  
+coverage  
+NoseGAE  
+WebTest  
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/evenge/EVENGE/blob/master/test.py&quot;&gt;test.py&lt;/a&gt;&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;import unittest
+from google.appengine.ext import db
+from google.appengine.ext import testbed
+from index import Evenge
+
+class EvengeTestCase(unittest.TestCase):
+def setUp(self):
+self.testbed = testbed.Testbed()
+self.testbed.activate()
+self.testbed.init_datastore_v3_stub()
+
+def tearDown(self):
+self.testbed.deactivate()
+
+def test(self):
+evenge = Evenge()
+response = evenge.hazElCuadrado(4)
+self.assertEqual(response,16)
+
+if __name__ == &quot;__main__&quot;:
+unittest.main()
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/evenge/EVENGE/blob/master/shippable.yml&quot;&gt;shippable.yaml&lt;/a&gt;&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;language: python
+
+python:
+- &quot;2.7&quot;
+
+#Esto es para desplegar en App Engine
+env:
+global:
+- GAE_DIR=/tmp/gae
+- EMAIL=8macau8@gmail.com
+- secure: RACsb1T9/QPr32TxNHaQ5yqq/EyWXSFIKlmmh633cvxygeBt7UJoM674Pqkg2RfwHN4XJ+lrC8s4FDffixbK4OXKr7aW0lNjLNcdPM/1NgZC1mimNGG+UOB1sAMkLUO909V+pMHq53f5oYb+s3aHFukq9zG5+d7+yNZ89bb+lX4ujhFjxMTltT8OOuQvzFwRkOoTH7CdfJDUqeF+MABCuzOFq1ewU6j0QqTi4DtZP4ZNNMA/8b0935U2tOdFlbQ8Xx1ZTm6UFrMGEJGlfRJAOKls20mXiF3wudYSXEw69PztNyJ2vg+WL7oE6xUobJHXOLIReevDm7KrmEC8p7Re4w==
+
+#Instalarse la mágina virtual GAE
+before_install:
+- &amp;gt;
+test -e $GAE_DIR ||
+(mkdir -p $GAE_DIR &amp;amp;&amp;amp;
+wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.15.zip -q -O /tmp/gae.zip &amp;amp;&amp;amp;
+unzip /tmp/gae.zip -d $GAE_DIR)
+#Instalar requerimientos
+install:
+- pip install -r requirements.txt
+
+before_script:
+- echo &#39;Europe/Madrid&#39; | sudo tee /etc/timezone
+- sudo dpkg-reconfigure --frontend noninteractive tzdata
+- mkdir -p shippable/testresults
+- mkdir -p shippable/codecoverage
+
+#Ejecutamos el script
+script:
+- &amp;gt;
+nosetests test.py
+--with-gae --without-sandbox --gae-lib-root=$GAE_DIR/google_appengine
+--with-xunit --xunit-file=shippable/testresults/test.xml
+--with-coverage --cover-xml --cover-xml-file=shippable/codecoverage/coverage.xml
+#Si se construye bien hacer esto
+after_success:
+- $GAE_DIR/google_appengine/appcfg.py --oauth2_access_token=$GAE_TOKEN update .
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;El archivo más importante es “Shippable” que es el que se encarga de realizar el test
+  con la ejecución del script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#Ejecutamos el script
+script:
+- &amp;gt;
+nosetests test.py
+--with-gae --without-sandbox --gae-lib-root=$GAE_DIR/google_appengine --with-xunit --xunit-file=shippable/testresults/test.xml --with-coverage --cover-xml --cover-xml-file=shippable/codecoverage/coverage.xml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cada archivo viene comentado con todo lo que hace.&lt;/p&gt;
+
+&lt;p&gt;Estos test pueden ser usados por cualquiera, solo que deben de ser modificados para su correcto funcionamiento en su correspondiente aplicación.&lt;/p&gt;
+
+&lt;p&gt;#Ejecutar el test#&lt;/p&gt;
+
+&lt;p&gt;Antes de proceder a ejecutar el test debemos de estar logueados en &lt;a href=&quot;http://www.shippable.com/&quot;&gt;Shippable&lt;/a&gt; y haber autorizado a “Shippable” entrar en nuestro repositorio de “GitHub”.
+  &lt;img src=&quot;http://i58.tinypic.com/2ros6ix.png&quot; alt=&quot;TEST&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Una vez dentro de “Shippable”, nos encontramos con este panel, que nos muestra información del test:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i61.tinypic.com/saxj0w.png&quot; alt=&quot;TEST&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Una vez realizado esto procedemos con con la ejecucion del test:&lt;/p&gt;
+
+&lt;p&gt;Lo primero que debemos de hacer es un “push” al repositorio y seguidamente hacer un “commit”, entonces al realizar el “commit” es cuando se ejecuta el test, que lo ejecuta “shippable” ejecutando el script. Cuando termina de realizar el test nos muestra este log:
+  &lt;img src=&quot;http://i58.tinypic.com/vwtp2x.png&quot; alt=&quot;TEST&quot; /&gt;
+  Este log nos muestra el resultado del test, si ha habido algun error o fallo, asi como si esta todo bien, en esta caso esta bien y nos da “Passing”.&lt;/p&gt;
+
+&lt;p&gt;En caso de que todo haya salido bien y nos encontremos en la rama master, se realiza un “Deploy” a GAE.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;after_success:
+- if [ &quot;$BRANCH&quot; == &quot;master&quot; ]; then $GAE_DIR/google_appengine/appcfg.py --oauth2_refresh_token=$GAE_TOKEN update . ; else echo &quot;No deployment for this $BRANCH&quot;; fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://evenge-2014.appspot.com/&quot;&gt;Aplicación&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  

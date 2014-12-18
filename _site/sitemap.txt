@@ -10,4 +10,6 @@ http://evenge.github.io/sitemap.txt
 http://evenge.github.io/tags.html
 
 http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2
+http://evenge.github.io/test/2014/12/16/test-unitarios-para-python
+http://evenge.github.io/test/2014/12/16/test
 http://evenge.github.io/general/2014/12/16/nos-decidimos-por-gae
