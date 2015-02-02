@@ -13,7 +13,9 @@ tags: [Docker,Dockerfile, GAE, Google App Engine, Evenge, Gestor de eventos, Pyt
 En Evenge hemos decidido automatizar el proceso de instalación del docker mediante [este](https://github.com/evenge/EVENGE/blob/master/despliegue/Dockerfile) script.
 
 ##Docker
+
 ####Explicando el script
+
 En primer lugar tendremos que instalar las depencencias de python que necesitamos:
 
 * Python
@@ -71,7 +73,9 @@ Una vez realizados todos los pasos tendremos desplegado nuestro entorno de desar
 
 
 ##Script de automatización de Docker
+
 ####Introducción
+
 También hemos hecho un Script que automatiza el proceso de instalación de Docker. A continuación la explicación paso a paso.
 
 ####Explicación del script
