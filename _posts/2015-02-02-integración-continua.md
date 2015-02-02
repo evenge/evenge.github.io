@@ -53,23 +53,20 @@ Ahora, vamos a indicar el lenguaje que vamos a usar en GAE
 
 Vamos a declarar las variables, rutas, etc necesarias:
 
-```
       env:
       global:
       - GAE_DIR=/tmp/gae
       - EMAIL=8macau8@gmail.com
       - secure: RACsb1T9/QPr32TxNHaQ5yqq/EyWXSFIKlmmh633cvxygeBt7UJoM674Pqkg2RfwHN4XJ+lrC8s4FDffixbK4OXKr7aW0lNjLNcdPM/1NgZC1mimNGG+UOB1sAMkLUO909V+pMHq53f5oYb+s3aHFukq9zG5+d7+yNZ89bb+lX4ujhFjxMTltT8OOuQvzFwRkOoTH7CdfJDUqeF+MABCuzOFq1ewU6j0QqTi4DtZP4ZNNMA/8b0935U2tOdFlbQ8Xx1ZTm6UFrMGEJGlfRJAOKls20mXiF3wudYSXEw69PztNyJ2vg+WL7oE6xUobJHXOLIReevDm7KrmEC8p7Re4w==
-```
 
 Como indica el tutorial, necesitaremos el SDK. Por tanto, vemos si existe, y si no, lo descargamos e instalamos.
-```
+
       before_install:
       - >
       test -e $GAE_DIR ||
       (mkdir -p $GAE_DIR &&
         wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.15.zip -q -O /tmp/gae.zip &&
         unzip /tmp/gae.zip -d $GAE_DIR)
-```
 
 Posteriormente, vamos a instalar los requerimientos que va a necesitar nuestra máquina para poder usar [NoseGAE](https://github.com/Trii/NoseGAE) para testeo y otras para conexión y provisión del servidor de desarrollo y conexión con la BD
 
@@ -84,52 +81,48 @@ Con la orden:
     - pip install -r requirements.txt
 
 Vamos a preparar el entorno para que lanzce los test:
-```
-before_script:
-- echo 'Europe/Madrid' | sudo tee /etc/timezone
-- sudo dpkg-reconfigure --frontend noninteractive tzdata
-- mkdir -p shippable/testresults
-- mkdir -p shippable/codecoverage
-```
+
+        before_script:
+        - echo 'Europe/Madrid' | sudo tee /etc/timezone
+        - sudo dpkg-reconfigure --frontend noninteractive tzdata
+        - mkdir -p shippable/testresults
+        - mkdir -p shippable/codecoverage
+
 Y una vez tenemos los directorios y la carpeta donde vamos a gardar los resultados, lanzamos nuestro test.py con Nose antes programado por nostros:
 
-```
-script:
-- >
-nosetests test.py
---with-gae --without-sandbox --gae-lib-root=$GAE_DIR/google_appengine
---with-xunit --xunit-file=shippable/testresults/test.xml
---with-coverage --cover-xml --cover-xml-file=shippable/codecoverage/coverage.xml
-```
+        script:
+        - >
+        nosetests test.py
+        --with-gae --without-sandbox --gae-lib-root=$GAE_DIR/google_appengine
+        --with-xunit --xunit-file=shippable/testresults/test.xml
+        --with-coverage --cover-xml --cover-xml-file=shippable/codecoverage/coverage.xml
 
 Este era nuestro test.py, para probar que se ha desplegado correctamente:
 
-```
-import unittest
-from google.appengine.ext import db
-from google.appengine.ext import testbed
-from index import Evenge
-
-class EvengeTestCase(unittest.TestCase):
-def setUp(self):
-self.testbed = testbed.Testbed()
-self.testbed.activate()
-self.testbed.init_datastore_v3_stub()
-
-def tearDown(self):
-self.testbed.deactivate()
-
-def test(self):
-evenge = Evenge()
-response = evenge.hazElCuadrado(4)
-self.assertEqual(response,16)
-
-if __name__ == "__main__":
-unittest.main()
-```
+        import unittest
+        from google.appengine.ext import db
+        from google.appengine.ext import testbed
+        from index import Evenge
+        
+        class EvengeTestCase(unittest.TestCase):
+        def setUp(self):
+        self.testbed = testbed.Testbed()
+        self.testbed.activate()
+        self.testbed.init_datastore_v3_stub()
+        
+        def tearDown(self):
+        self.testbed.deactivate()
+        
+        def test(self):
+        evenge = Evenge()
+        response = evenge.hazElCuadrado(4)
+        self.assertEqual(response,16)
+        
+        if __name__ == "__main__":
+        unittest.main()
 
 Si la operación es satisfactoria, procederá al despliegue automático de los achivos del repositorio de la rama Master.
-```
-after_success:
-- if [ "$BRANCH" == "master" ]; then $GAE_DIR/google_appengine/appcfg.py --oauth2_refresh_token=$GAE_TOKEN update . ; else echo "No deployment for this $BRANCH"; fi
-```
+
+        after_success:
+        - if [ "$BRANCH" == "master" ]; then $GAE_DIR/google_appengine/appcfg.py --oauth2_refresh_token=$GAE_TOKEN update . ; else echo "No deployment for this $BRANCH"; fi
+
