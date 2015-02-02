@@ -45,12 +45,11 @@ Volvemos a repetir, que no vamos a introducir la linea anterior, por lo que part
 
 Ahora, vamos a indicar el lenguaje que vamos a usar en GAE
 
-```
-language: python
+        language: python
+        
+        python:
+        - "2.7"
 
-python:
-- "2.7"
-```
 
 Vamos a declarar las variables, rutas, etc necesarias:
 
