@@ -23,6 +23,7 @@ Evenge dispone de las siguientes funcionalidades:
 * [Francisco Javier Expósito Cruz](http://github.com/franexposito)
 * [Victor Coronas Lara](http://github.com/VictorCoronas)
 
+---------------------------------------
 **GITHUB**: [github.com/evenge/EVENGE](https://github.com/evenge/EVENGE)  
 **Aplicación**: [evenge-2014.appspot.com](https://evenge-2014.appspot.com)  
 **Email**: [desarrollo.evenge@gmail.com](mailto://desarrolo.evenge@gmail.com)  
