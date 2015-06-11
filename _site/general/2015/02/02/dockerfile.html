@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <!-- (1) Optimize for mobile versions: http://goo.gl/EOpFl -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- (1) force latest IE rendering engine: bit.ly/1c8EiC9 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Dockerfile </title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="canonical" href="http://evenge.github.io/general/2015/02/02/dockerfile.html">
+
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+<!--  <link rel="stylesheet" href=""> -->
+  <link rel="stylesheet" href="http://brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="/css/print.css" />
+</head>
+
+  <body itemscope itemtype="http://schema.org/Article">
+    <!-- header start -->
+
+<a href="http://evenge.github.io" class="logo-readium"><span class="logo" style="background-image: url(/assets/images/logo.jpg)"></span></a>
+
+<!-- header end -->
+
+    <main class="content" role="main">
+      <article class="post">
+        
+        <div class="noarticleimage">
+          <div class="post-meta">
+            <h1 class="post-title">Dockerfile </h1>
+            <div class="cf post-meta-text">
+              <div class="author-image" style="background-image: url()">Blog Logo</div>
+              <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person"></h4>
+              on
+              <time datetime="2015-02-02T00:00:00+01:00">02 Feb 2015</time>
+              <!-- , tagged on <span class="post-tag-">, <a href="/tag/"></a></span> -->
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        
+        <section class="post-content">
+          <div class="post-reading">
+            <span class="post-reading-time"></span> read
+          </div>
+          <a name="topofpage"></a>
+          <h1>Docker</h1>
+
+<p><a href="https://www.docker.com/">Docker</a> es un una plataforma para desarrolladores y administradores de sistema que te permite desarrollar, desplegar y ejecutar aplicaciones. Docker permite testear el codigo y desplegarlo en producción rápidamente.  </p>
+
+<h2>Introducción</h2>
+
+<p>En Evenge hemos decidido automatizar el proceso de instalación del docker mediante <a href="https://github.com/evenge/EVENGE/blob/master/despliegue/Dockerfile">este</a> script.</p>
+
+<h2>Docker</h2>
+
+<h4>Explicando el script</h4>
+
+<p>En primer lugar tendremos que instalar las depencencias de python que necesitamos:</p>
+
+<ul>
+<li>Python</li>
+<li>Python setuptools</li>
+<li><a href="https://pypi.python.org/pypi/pip/">Pip</a></li>
+<li>Python build-essential</li>
+<li>wget</li>
+<li><p>zip</p>
+
+<p>RUN apt-get update &amp;&amp; apt-get install -y python
+RUN apt-get install -y python-setuptools
+RUN easy_install pip
+RUN apt-get install -y python-dev build-essential
+RUN apt-get install -y wget
+RUN apt-get install -y zip</p></li>
+</ul>
+
+<p>Después tendremos que instalar los distintos frameworks que vamos a usar en el desarrollo de nuestra aplicación. En nuestro caso son dos:</p>
+
+<ul>
+<li>webapp2</li>
+<li>jinja</li>
+</ul>
+
+<p>Los motivos de porque hemos usado estos frameworks están mejor detallados <a href="http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2/">aqui</a>.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">RUN pip install webapp2
+RUN pip install jinja2
+</code></pre></div>
+<p>El siguiente paso es descargar el SDK de GAE y descomprimirlo:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">RUN wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.17.zip --no-check-certificate
+RUN unzip google_appengine_1.9.17.zip
+</code></pre></div>
+<p>Tras descargar y descomprimir el SDK de GAE nos toca instalar el google-cloud-sdk y configurar el proyecto Evenge:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">RUN curl -sSL https://sdk.cloud.google.com | bash
+RUN gcloud auth login
+RUN gcloud config set project &lt;google-cloud-project-id&gt;
+</code></pre></div>
+<p>El último paso es instalar git y clonar nuestro repostorio:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">RUN apt-get install -y git
+RUN git clone https://github.com/evenge/EVENGE.git
+RUN cd EVENGE &amp;&amp; git branch -b $USER
+</code></pre></div>
+<p>Una vez realizados todos los pasos tendremos desplegado nuestro entorno de desarrollo.</p>
+
+<h2>Script de automatización de Docker</h2>
+
+<h4>Introducción</h4>
+
+<p>También hemos hecho un Script que automatiza el proceso de instalación de Docker. A continuación la explicación paso a paso.</p>
+
+<h4>Explicación del script</h4>
+
+<p>En primer lugar, se instala Docker y las dependencias necesarias:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">su -c &#39;apt-get update
+apt-get install -y docker.io
+source /etc/bash_completion.d/docker.io
+[ -e /usr/lib/apt/methods/https ] || {
+  apt-get update
+  apt-get install -y apt-transport-https
+}
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+sh -c &quot;echo deb https://get.docker.com/ubuntu docker main\
+&gt; /etc/apt/sources.list.d/docker.list&quot;
+apt-get update
+apt-get install -y lxc-docker
+</code></pre></div>
+<p>Tras esto nos descargamos la imagen producida con el Dockerfile y la ejecutamos:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">docker pull ivanortegaalba/evenge
+docker run -t -i ivanortegaalba/evenge /bin/bash&#39;
+</code></pre></div>
+        </section>
+        <footer class="post-footer">
+          <section class="share">
+            
+              
+                <a class="icon-twitter" href="http://twitter.com/share?text=Dockerfile+&amp;url=http://evenge.github.io/general/2015/02/02/dockerfile"
+                  onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+                <i class="fa fa-twitter"></i><span class="hidden">twitter</span>
+                </a>
+              
+            
+              
+            
+          </section>
+        </footer>
+        <div class="bottom-teaser cf">
+          <div class="isLeft">
+            <h5 class="index-headline featured"><span>Written by</span></h5>
+            <section class="author">
+              <div class="author-image" style="background-image: url()">Blog Logo</div>
+              <h4></h4>
+              <p class="bio"></p>
+              <hr>
+              <p class="published">Published <time datetime="2015-02-02 00:00">02 Feb 2015</time></p>
+            </section>
+          </div>
+          
+          <div class="isRight">
+            <h5 class="index-headline featured"><span>Supported by</span></h5>
+            <footer class="site-footer">
+              <section class="poweredby">Proudly published with <a href="http://jekyllrb.com"> Jekyll</a></section>
+              <a class="subscribe" href="/feed.xml"> <span class="tooltip"> <i class="fa fa-rss"></i> You should subscribe to my feed.</span></a>
+              <div class="inner">
+                <section class="copyright">All content copyright <a href="/"></a> &copy; 2015<br>All rights reserved.</section>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </article>
+    </main>
+    <div class="bottom-closer">
+      <div class="background-closer-image"  style="background-image: url(/assets/images/land4.jpg)">
+        Image
+      </div>
+      <div class="inner">
+        <h1 class="blog-title">Blog | Evenge</h1>
+        <h2 class="blog-description"></h2>
+        <a href="/" class="btn">Back to Overview</a>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/assets/js/index.js"></script>
+<script type="text/javascript" src="/assets/js/readingTime.min.js"></script>
+<script>
+(function ($) {
+  "use strict";
+  $(document).ready(function(){
+
+    var $window = $(window),
+    $image = $('.post-image-image, .teaserimage-image');
+    
+      $window.on('scroll', function() {
+        var top = $window.scrollTop();
+
+        if (top < 0 || top > 1500) { return; }
+        $image
+          .css('transform', 'translate3d(0px, '+top/3+'px, 0px)')
+          .css('opacity', 1-Math.max(top/700, 0));
+      });
+      $window.trigger('scroll');
+
+      var height = $('.article-image').height();
+      $('.post-content').css('padding-top', height + 'px');
+
+      $('a[href*=#]:not([href=#])').click(function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+         && location.hostname == this.hostname) {
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+          if (target.length) {
+            $('html,body').animate({ scrollTop: target.offset().top }, 500);
+            return false;
+          }
+        }
+      });
+
+  });
+}(jQuery));
+</script>
+
+
+  </body>
+</html>

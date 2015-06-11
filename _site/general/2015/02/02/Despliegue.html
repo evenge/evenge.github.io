@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <!-- (1) Optimize for mobile versions: http://goo.gl/EOpFl -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- (1) force latest IE rendering engine: bit.ly/1c8EiC9 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Despliegue en GAE </title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="canonical" href="http://evenge.github.io/general/2015/02/02/Despliegue.html">
+
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+<!--  <link rel="stylesheet" href=""> -->
+  <link rel="stylesheet" href="http://brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="/css/print.css" />
+</head>
+
+  <body itemscope itemtype="http://schema.org/Article">
+    <!-- header start -->
+
+<a href="http://evenge.github.io" class="logo-readium"><span class="logo" style="background-image: url(/assets/images/logo.jpg)"></span></a>
+
+<!-- header end -->
+
+    <main class="content" role="main">
+      <article class="post">
+        
+        <div class="noarticleimage">
+          <div class="post-meta">
+            <h1 class="post-title">Despliegue en GAE </h1>
+            <div class="cf post-meta-text">
+              <div class="author-image" style="background-image: url()">Blog Logo</div>
+              <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person"></h4>
+              on
+              <time datetime="2015-02-02T00:00:00+01:00">02 Feb 2015</time>
+              <!-- , tagged on <span class="post-tag-">, <a href="/tag/"></a></span> -->
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        
+        <section class="post-content">
+          <div class="post-reading">
+            <span class="post-reading-time"></span> read
+          </div>
+          <a name="topofpage"></a>
+          <h1>DESPLIEGUE DE LA APLICACIÓN</h1>
+
+<p>Antes de comenzar tenemos que saber que GAE tiene una serie de limitaciones si se usa de forma gratuita a la hora de desplegar nuestras aplicaciones, que son las siguientes:</p>
+
+<ul>
+<li><p>Tiene un espacio máximo de 10 aplicaciones de forma gratuita.</p></li>
+<li><p>Tiene cierta limitación en la cuota de visita(5 millones de visitas mensuales), ejemplo:</p></li>
+</ul>
+
+<p>Si 50 visitantes acceden a mi página, es probable que dicha cuota se encuentre en, aproximadamente, un 10%. Esto indicaría que si accedieran otros 450 visitantes se completaría la cuota, llegando al 100%, y mi aplicación quedaría pausada hasta el reinicio de todas las cuotas (cada 24hs).</p>
+
+<ul>
+<li>Tiene cierta limitación en el almacenamiento de datos(500MB de espacio), ejemplo:</li>
+</ul>
+
+<p>Si la cuota estándar (gratis) se limita a los 1000 MB de datos almacenados y nuestra aplicación alcanza dicha cantidad, podrá seguir recibiendo peticiones (si es que no se ha alcanzado el máximo de ésta cuota), pero no podrá continuar almacenando en la base de datos.</p>
+
+<p>Para ello se puede contratar más de cantidad de visitas como de almacenamiento.</p>
+
+<h1>Registro</h1>
+
+<p>Antes de despleglar nuestra aplicación debemos de registrar nuestra aplicacion en <a href="https://accounts.google.com/ServiceLogin?service=ah&amp;passive=true&amp;continue=https%3A%2F%2Fappengine.google.com%2F_ah%2Fconflogin%3Fcontinue%3Dhttps%3A%2F%2Fappengine.google.com%2F&amp;ltmpl=ae">appengine.google.com</a>
+Una vez ingresado, presiona en el botón “Create Application”.</p>
+
+<p><a href=""><img src="http://recursospython.com/wp-content/uploads/2013/10/4.png" alt="GAE"></a></p>
+
+<p>Ahora procedemos a rellenar los campos teniendo en cuenta lo siguiente:</p>
+
+<ul>
+<li>Application Identifier: dominio por el cual tendremos acceso a nuestra aplicación. Utiliza el botón “Check Availability” para verificar que esté disponible.</li>
+<li>Application Title: título para la aplicación. No es muy relevante pero no puede ser cambiado. Te recomiendo un nombre en minúsculas y sin espacios.
+En los demás campos deja los valores por defecto.
+Por último presiona &quot;Create Application&quot;. Una vez creada, dirígete nuevamente a appengine.google.com y verás tu aplicación en la lista.</li>
+</ul>
+
+<h1>Ejecutar nuestra apliación en local</h1>
+
+<p>Un paso muy importante antes de desplegar nuestra aplicación en el servidor de GAE, es desplegarla &quot;Localmente&quot;, para realizar las pertinentes pruebas y test de funcionamiento.</p>
+
+<p><a href="">Linux</a></p>
+
+<p>Si usamos  linux se realizaria de la siguiente manera en la terminal introduciendo estos comandos:</p>
+
+<p>Iniciar el servidor de desarrollo local indica lo siguiente en la terminal:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  dev_appserver.py ubicacionapp
+</code></pre></div>
+<p>Por defecto el puerto 8080 será utilizado. Para cambiarlo, indica:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  dev_appserver.py --port=8081 ubicacionapp/
+</code></pre></div>
+<p><a href="">Mac y Windows</a></p>
+
+<p>Mac y Windows cuentan con un &quot;Laucher&quot; para esta tarea, ambos &quot;Laucher&quot; son iguales así que realizaré la explicación en Mac.</p>
+
+<p>Lo primero que debemos de hacer es instalar el <a href="https://cloud.google.com/appengine/downloads">SDK</a>, en caso de no tenerlo instalado.</p>
+
+<p>Una vez que lo tenemos instalado, vamos a crear el proyecto en con el &quot;Laucher&quot; que se nos ha instalado.</p>
+
+<p>En mi caso yo uso Mac, así que simplemente tenemos que ejecutar el Launcher de GAE que hemos instalado.</p>
+
+<p>Cuando se haya ejecutado le tenemos que dar al botón &quot;+&quot; que se encuentra en la parte inferior izquierda.</p>
+
+<p>Cuando hayamos hecho eso, se nos abrirá una ventanita donde debemos de buscar la carpeta que contiene nuestro proyecto, y también debemos de especificar el nombre que le queremos poner al proyecto para hacer las pruebas en local.</p>
+
+<p>Los siguientes puertos vienen por defecto:
++ Admin port
++ Port</p>
+
+<p>pero nosotros podemos especificar los que queramos.</p>
+
+<p>Cuando ya tengamos todo listo, le damos al botón &quot;Create&quot;, de esta manera el proyecto se nos creará y se añadira a la lista de proyectos.</p>
+
+<p>Una vez realizados todos estos pasos, solo debemos de darle a botón &quot;Run&quot; y nuestro proyecto se ejecutará en local.</p>
+
+<p>Ahora solo debemos de irnos a nuestro navegador y escribir:</p>
+
+<p>localhost:8080</p>
+
+<p><a href=""><img src="http://i.imgur.com/bX9LexV.png" alt="GAE"></a></p>
+
+<p>De esta manera se usaría en local nuestra aplicación y podreamos probar todo lo que queramos.</p>
+
+<h1>Desplegar la aplicación definitivamente</h1>
+
+<p>Una vez desarrollado la aplicación y testeado su funcionalidad en el servidor de desarrollo local, procederemos a desplegar
+la aplicación en Google. Para usuarios de Linux el procedimiento será vía consola. Para Windows y Mac OS X utilizaremos el &quot;Launcher&quot;.</p>
+
+<p><a href="">Linux</a></p>
+
+<p>Abre la terminal y ejecuta:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  appcfg.py --email=yo@gmail.com update ubicacionapp/
+</code></pre></div>
+<ul>
+<li>La opción --email indica la cuenta de Google en la cual se encuentra registrada la aplicación. Si tu dirección es @gmail.com, éste puede omitirse (--email=yo).</li>
+<li>Luego, será solicitada la contraseña.</li>
+<li>ubicacionapp/ indica la carpeta o ruta en donde se encuentra el archivo app.yaml junto con los demás, pero este primero determinará la existencia de una aplicación en dicha ruta para appcfg.py.</li>
+<li><p>En caso de haber especificado erróneamente la ubicación, se quejará diciendo:</p>
+
+<p>appcfg.py: error: Directory does not contain an Documents.yaml configuration file.</p></li>
+</ul>
+
+<p><a href="">Mac y Windows</a></p>
+
+<p>Para este caso ejecutamos el &quot;Laucher&quot; y selecciona tu aplicación en la lista de aplicaciones. Luego, presiona el botón “Deploy” en la barra superior. La dirección de correo y contraseña serán solicitados. Al finalizar el proceso, la ventana “Delpoyment to Google” indicará que la misma puede ser cerrada.</p>
+
+<p><a href=""><img src="http://i.imgur.com/LlyJ4F2.png" alt="GAE"></a></p>
+
+<p>De esta manera, ya se encuentra nuestra aplicación en funcionamiento.
+<a href="evenge-2014.appspot.com">evenge-2014.appspot.com</a></p>
+
+        </section>
+        <footer class="post-footer">
+          <section class="share">
+            
+              
+                <a class="icon-twitter" href="http://twitter.com/share?text=Despliegue+en+GAE+&amp;url=http://evenge.github.io/general/2015/02/02/Despliegue"
+                  onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+                <i class="fa fa-twitter"></i><span class="hidden">twitter</span>
+                </a>
+              
+            
+              
+            
+          </section>
+        </footer>
+        <div class="bottom-teaser cf">
+          <div class="isLeft">
+            <h5 class="index-headline featured"><span>Written by</span></h5>
+            <section class="author">
+              <div class="author-image" style="background-image: url()">Blog Logo</div>
+              <h4></h4>
+              <p class="bio"></p>
+              <hr>
+              <p class="published">Published <time datetime="2015-02-02 00:00">02 Feb 2015</time></p>
+            </section>
+          </div>
+          
+          <div class="isRight">
+            <h5 class="index-headline featured"><span>Supported by</span></h5>
+            <footer class="site-footer">
+              <section class="poweredby">Proudly published with <a href="http://jekyllrb.com"> Jekyll</a></section>
+              <a class="subscribe" href="/feed.xml"> <span class="tooltip"> <i class="fa fa-rss"></i> You should subscribe to my feed.</span></a>
+              <div class="inner">
+                <section class="copyright">All content copyright <a href="/"></a> &copy; 2015<br>All rights reserved.</section>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </article>
+    </main>
+    <div class="bottom-closer">
+      <div class="background-closer-image"  style="background-image: url(/assets/images/land4.jpg)">
+        Image
+      </div>
+      <div class="inner">
+        <h1 class="blog-title">Blog | Evenge</h1>
+        <h2 class="blog-description"></h2>
+        <a href="/" class="btn">Back to Overview</a>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/assets/js/index.js"></script>
+<script type="text/javascript" src="/assets/js/readingTime.min.js"></script>
+<script>
+(function ($) {
+  "use strict";
+  $(document).ready(function(){
+
+    var $window = $(window),
+    $image = $('.post-image-image, .teaserimage-image');
+    
+      $window.on('scroll', function() {
+        var top = $window.scrollTop();
+
+        if (top < 0 || top > 1500) { return; }
+        $image
+          .css('transform', 'translate3d(0px, '+top/3+'px, 0px)')
+          .css('opacity', 1-Math.max(top/700, 0));
+      });
+      $window.trigger('scroll');
+
+      var height = $('.article-image').height();
+      $('.post-content').css('padding-top', height + 'px');
+
+      $('a[href*=#]:not([href=#])').click(function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+         && location.hostname == this.hostname) {
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+          if (target.length) {
+            $('html,body').animate({ scrollTop: target.offset().top }, 500);
+            return false;
+          }
+        }
+      });
+
+  });
+}(jQuery));
+</script>
+
+
+  </body>
+</html>

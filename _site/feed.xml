@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog | Evenge</title>
+    <description></description>
+    <link>http://evenge.github.io/</link>
+    <atom:link href="http://evenge.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Thu, 11 Jun 2015 20:22:59 +0200</pubDate>
+    <lastBuildDate>Thu, 11 Jun 2015 20:22:59 +0200</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Testeo</title>
+        <description>&lt;h1&gt;Tests unitarios con Shippable y NoseGAE&lt;/h1&gt;
+
+&lt;p&gt;Podemos consultar la documentación de &lt;a href=&quot;https://github.com/Trii/NoseGAE&quot;&gt;NoseGAE&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Cuando Shipable, como ya hemos comentado, llega al apartado de ejecución de test, en nuestro caso del archivo test.py, procede a realizar los test unitarios de este módulo.
+En nuestro archivo podemos encontrar funciones como esta:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  def test(self):
+  evenge = Evenge()
+  response = evenge.hazElCuadrado(4)
+  self.assertEqual(response,16)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;oseGAE establece el entorno de desarrollo GAE antes de su prueba.
+Esto significa que usted puede escribir fácilmente test funcionales para su aplicación sin tener que arrancar realmente el servidor dev y ponerlo a prueba a través de HTTP.
+El plugin también configura e inicia una instancia TestBed, su application&lt;em&gt;id basa apagado su app.yaml , y establece los caminos adecuados utilizando dev&lt;/em&gt;appserver.fix&lt;em&gt;sys&lt;/em&gt;path ().&lt;/p&gt;
+
+&lt;p&gt;Es una función básica que nos servirá de ejemplo, pero podemos ver como se trabaja.
+Simplemente es la comprobación de si la respuesta a una función dá el valor esperado.
+Si es así, el test es satisfactorio, de lo contrario, el test será fallido y Shippable no procederá al despliegue.&lt;/p&gt;
+
+&lt;p&gt;Veamos una función que usamos en nuestro test.py:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;import unittest
+from google.appengine.ext import db
+from google.appengine.ext import testbed
+from index import Evenge
+from _oo.classes.ponente import Ponente
+from _oo.classes.evento import Evento
+
+class EvengeTestCase(unittest.TestCase):
+def setUp(self):
+self.testbed = testbed.Testbed()
+self.testbed.activate()
+self.testbed.init_datastore_v3_stub()
+
+def tearDown(self):
+self.testbed.deactivate()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Función de testeo que comprobará si es factible insertar un Ponente.
+  Sirve de utilidad para ver si hay conexión con DataStore y si la introducción de un ponente va a dar o no error.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def testInsertarPonente(self):
+  evenge = Evenge()
+  ponente = Ponente(
+    email = &amp;quot;pepito@jemail.com&amp;quot;,
+    telefono = &amp;quot;sony xperia&amp;quot;,
+    twitter = &amp;quot;@pepitoG&amp;quot;,
+    web = &amp;quot;http://pepitoG.es&amp;quot;
+  )
+  response = evenge.testPonente(ponente)
+  self.assertEqual(response,&amp;#39;pepito@jemail.com&amp;#39;)
+
+  if __name__ == &amp;quot;__main__&amp;quot;:
+    unittest.main()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Funcion testPonente() de la clase Evenge&lt;/h1&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def testPonente(self, ponente):
+  ponente.put()
+  query = Ponente.query(Ponente.email == &amp;#39;pepito@jemail.com&amp;#39;)
+  email = query.email
+  query.delete
+  return email
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Con este test, vemos si esta disponible el Datastore para poder insertar ponentes en este caso.
+Tenemos que tener en cuenta el importar los módulos necesarios para el test.&lt;/p&gt;
+
+&lt;p&gt;A la hora de hacer el despliegue, cuando hacemos un push a la rama master de nuestro repo, Shippable ejecutará estos test, y nos devolverá los resultados de los casos.
+&lt;img src=&quot;http://i58.tinypic.com/vwtp2x.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 02 Feb 2015 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/test/2015/02/02/testeo.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/test/2015/02/02/testeo.html</guid>
+        
+        <category>Shippable</category>
+        
+        <category>GAE</category>
+        
+        <category>Google App Engine</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        <category>Python</category>
+        
+        
+        <category>test</category>
+        
+      </item>
+    
+      <item>
+        <title>Integración continua </title>
+        <description>&lt;h1&gt;Integración continua.&lt;/h1&gt;
+
+&lt;p&gt;Para provisionar nuestro proyecto con integración continua barajamos varias posibilidades.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;La sincronización directa con GitHub que nos provee GAE.
+Simplemente con añadir el repo donde tenemos el código, GAE sincroniza la app con el, y cuando se realice un push, se hará el despliegue automático.
+Esto es factible, si y solo si tenemos unicamente el código de la aplicación el el repo.
+Pero nosotros tenemos documentación, lista de tareas, etc. Por lo que no nos valía.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;La segunda opción, y por la que nos decantamos finalmente, fue el despliegue por Shippable.
+Este sistema de CI permite crear, provisionar, testear y desplegar nuestra app en una máquina virtual, en el servidor que queramos.
+Además trabaja con IaaS y PaaS como Heroku, Amazon Elastic Beanstalk, OpsWorks AWS, Google App Engine, Red Hat OpenShift o cualquier proveedor de infraestructura después de una compilación exitosa.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;Shippable&lt;/h2&gt;
+
+&lt;h3&gt;Introduccion&lt;/h3&gt;
+
+&lt;p&gt;Shippable usa Docker para el despliegue de las apps.
+Sus casos de uso más comunes, y concretamente los que vamos a darle en el proyecto son:
+- Automatización del empaquetado y despliegue de web apps.
+- Testeo automatizado y despliegue en caso de éxito.&lt;/p&gt;
+
+&lt;h3&gt;Configurar Shippable para Evenge.&lt;/h3&gt;
+
+&lt;p&gt;Primeramente, desde www.shipable.com, nos logeamos y conectamos con nuestro GitHub. Podemos seguir este &lt;a href=&quot;http://docs.shippable.com/en/latest/start.html#getstarted&quot;&gt;tutorial&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Una vez, tenemos ya sincronizado nuestro repo, desde Shippable vamos a crear nuestro YML que irá en función a la plataforma donde vayamos a hacer el despliegue.
+En nuestro caso, GAE, Shippable nos proporciona este &lt;a href=&quot;http://docs.shippable.com/en/latest/continuous_deployment.html#continuous-deployment-to-google-app-engine&quot;&gt;tutorial&lt;/a&gt;.
+Veamos pasa a paso, como hemos creado nuestro shippable.yml:&lt;/p&gt;
+
+&lt;p&gt;El primer paso sería indicar la imagen de DockerHub, nosotros, tenemos ya una creada,
+pero vamos a omitirla, y vamos a crearla desde cero, ya que solo es añadir el SDK con Shippable.
+Vamos a no indicarla, ya que vamos a usar la que nos da Shippable por defecto. Pero podríamos con algo como esto:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    build_image :  evenge / entorno
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Volvemos a repetir, que no vamos a introducir la linea anterior, por lo que partimos de la imagen Shippable por defecto.&lt;/p&gt;
+
+&lt;p&gt;Ahora, vamos a indicar el lenguaje que vamos a usar en GAE&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    language: python
+
+    python:
+    - &amp;quot;2.7&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Vamos a declarar las variables, rutas, etc necesarias:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  env:
+  global:
+  - GAE_DIR=/tmp/gae
+  - EMAIL=8macau8@gmail.com
+  - secure: RACsb1T9/QPr32TxNHaQ5yqq/EyWXSFIKlmmh633cvxygeBt7UJoM674Pqkg2RfwHN4XJ+lrC8s4FDffixbK4OXKr7aW0lNjLNcdPM/1NgZC1mimNGG+UOB1sAMkLUO909V+pMHq53f5oYb+s3aHFukq9zG5+d7+yNZ89bb+lX4ujhFjxMTltT8OOuQvzFwRkOoTH7CdfJDUqeF+MABCuzOFq1ewU6j0QqTi4DtZP4ZNNMA/8b0935U2tOdFlbQ8Xx1ZTm6UFrMGEJGlfRJAOKls20mXiF3wudYSXEw69PztNyJ2vg+WL7oE6xUobJHXOLIReevDm7KrmEC8p7Re4w==
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Como indica el tutorial, necesitaremos el SDK. Por tanto, vemos si existe, y si no, lo descargamos e instalamos.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  before_install:
+  - &amp;gt;
+  test -e $GAE_DIR ||
+  (mkdir -p $GAE_DIR &amp;amp;&amp;amp;
+    wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.15.zip -q -O /tmp/gae.zip &amp;amp;&amp;amp;
+    unzip /tmp/gae.zip -d $GAE_DIR)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Posteriormente, vamos a instalar los requerimientos que va a necesitar nuestra máquina para poder usar &lt;a href=&quot;https://github.com/Trii/NoseGAE&quot;&gt;NoseGAE&lt;/a&gt; para testeo y otras para conexión y provisión del servidor de desarrollo y conexión con la BD&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  nose
+  coverage
+  NoseGAE
+  WebTest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Con la orden:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;install:
+- pip install -r requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Vamos a preparar el entorno para que lanzce los test:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    before_script:
+    - echo &amp;#39;Europe/Madrid&amp;#39; | sudo tee /etc/timezone
+    - sudo dpkg-reconfigure --frontend noninteractive tzdata
+    - mkdir -p shippable/testresults
+    - mkdir -p shippable/codecoverage
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Y una vez tenemos los directorios y la carpeta donde vamos a gardar los resultados, lanzamos nuestro test.py con Nose antes programado por nostros:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    script:
+    - &amp;gt;
+    nosetests test.py
+    --with-gae --without-sandbox --gae-lib-root=$GAE_DIR/google_appengine
+    --with-xunit --xunit-file=shippable/testresults/test.xml
+    --with-coverage --cover-xml --cover-xml-file=shippable/codecoverage/coverage.xml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Este era nuestro test.py, para probar que se ha desplegado correctamente:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    import unittest
+    from google.appengine.ext import db
+    from google.appengine.ext import testbed
+    from index import Evenge
+
+    class EvengeTestCase(unittest.TestCase):
+    def setUp(self):
+    self.testbed = testbed.Testbed()
+    self.testbed.activate()
+    self.testbed.init_datastore_v3_stub()
+
+    def tearDown(self):
+    self.testbed.deactivate()
+
+    def test(self):
+    evenge = Evenge()
+    response = evenge.hazElCuadrado(4)
+    self.assertEqual(response,16)
+
+    if __name__ == &amp;quot;__main__&amp;quot;:
+    unittest.main()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Si la operación es satisfactoria, procederá al despliegue automático de los achivos del repositorio de la rama Master.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    after_success:
+    - if [ &amp;quot;$BRANCH&amp;quot; == &amp;quot;master&amp;quot; ]; then $GAE_DIR/google_appengine/appcfg.py --oauth2_refresh_token=$GAE_TOKEN update . ; else echo &amp;quot;No deployment for this $BRANCH&amp;quot;; fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Mon, 02 Feb 2015 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/test/2015/02/02/integracio%CC%81n-continua.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/test/2015/02/02/integracio%CC%81n-continua.html</guid>
+        
+        <category>test</category>
+        
+        <category>GAE</category>
+        
+        <category>Google App Engine</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        <category>Python</category>
+        
+        
+        <category>test</category>
+        
+      </item>
+    
+      <item>
+        <title>Dockerfile </title>
+        <description>&lt;h1&gt;Docker&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; es un una plataforma para desarrolladores y administradores de sistema que te permite desarrollar, desplegar y ejecutar aplicaciones. Docker permite testear el codigo y desplegarlo en producción rápidamente.  &lt;/p&gt;
+
+&lt;h2&gt;Introducción&lt;/h2&gt;
+
+&lt;p&gt;En Evenge hemos decidido automatizar el proceso de instalación del docker mediante &lt;a href=&quot;https://github.com/evenge/EVENGE/blob/master/despliegue/Dockerfile&quot;&gt;este&lt;/a&gt; script.&lt;/p&gt;
+
+&lt;h2&gt;Docker&lt;/h2&gt;
+
+&lt;h4&gt;Explicando el script&lt;/h4&gt;
+
+&lt;p&gt;En primer lugar tendremos que instalar las depencencias de python que necesitamos:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;Python setuptools&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://pypi.python.org/pypi/pip/&quot;&gt;Pip&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Python build-essential&lt;/li&gt;
+&lt;li&gt;wget&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;zip&lt;/p&gt;
+
+&lt;p&gt;RUN apt-get update &amp;amp;&amp;amp; apt-get install -y python
+RUN apt-get install -y python-setuptools
+RUN easy_install pip
+RUN apt-get install -y python-dev build-essential
+RUN apt-get install -y wget
+RUN apt-get install -y zip&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Después tendremos que instalar los distintos frameworks que vamos a usar en el desarrollo de nuestra aplicación. En nuestro caso son dos:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;webapp2&lt;/li&gt;
+&lt;li&gt;jinja&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Los motivos de porque hemos usado estos frameworks están mejor detallados &lt;a href=&quot;http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2/&quot;&gt;aqui&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RUN pip install webapp2
+RUN pip install jinja2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;El siguiente paso es descargar el SDK de GAE y descomprimirlo:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RUN wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.17.zip --no-check-certificate
+RUN unzip google_appengine_1.9.17.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Tras descargar y descomprimir el SDK de GAE nos toca instalar el google-cloud-sdk y configurar el proyecto Evenge:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RUN curl -sSL https://sdk.cloud.google.com | bash
+RUN gcloud auth login
+RUN gcloud config set project &amp;lt;google-cloud-project-id&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;El último paso es instalar git y clonar nuestro repostorio:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RUN apt-get install -y git
+RUN git clone https://github.com/evenge/EVENGE.git
+RUN cd EVENGE &amp;amp;&amp;amp; git branch -b $USER
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Una vez realizados todos los pasos tendremos desplegado nuestro entorno de desarrollo.&lt;/p&gt;
+
+&lt;h2&gt;Script de automatización de Docker&lt;/h2&gt;
+
+&lt;h4&gt;Introducción&lt;/h4&gt;
+
+&lt;p&gt;También hemos hecho un Script que automatiza el proceso de instalación de Docker. A continuación la explicación paso a paso.&lt;/p&gt;
+
+&lt;h4&gt;Explicación del script&lt;/h4&gt;
+
+&lt;p&gt;En primer lugar, se instala Docker y las dependencias necesarias:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;su -c &amp;#39;apt-get update
+apt-get install -y docker.io
+source /etc/bash_completion.d/docker.io
+[ -e /usr/lib/apt/methods/https ] || {
+  apt-get update
+  apt-get install -y apt-transport-https
+}
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+sh -c &amp;quot;echo deb https://get.docker.com/ubuntu docker main\
+&amp;gt; /etc/apt/sources.list.d/docker.list&amp;quot;
+apt-get update
+apt-get install -y lxc-docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Tras esto nos descargamos la imagen producida con el Dockerfile y la ejecutamos:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;docker pull ivanortegaalba/evenge
+docker run -t -i ivanortegaalba/evenge /bin/bash&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Mon, 02 Feb 2015 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/general/2015/02/02/dockerfile.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/general/2015/02/02/dockerfile.html</guid>
+        
+        <category>Docker</category>
+        
+        <category>Dockerfile</category>
+        
+        <category>GAE</category>
+        
+        <category>Google App Engine</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        <category>Python</category>
+        
+        
+        <category>general</category>
+        
+      </item>
+    
+      <item>
+        <title>Despliegue en GAE </title>
+        <description>&lt;h1&gt;DESPLIEGUE DE LA APLICACIÓN&lt;/h1&gt;
+
+&lt;p&gt;Antes de comenzar tenemos que saber que GAE tiene una serie de limitaciones si se usa de forma gratuita a la hora de desplegar nuestras aplicaciones, que son las siguientes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Tiene un espacio máximo de 10 aplicaciones de forma gratuita.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Tiene cierta limitación en la cuota de visita(5 millones de visitas mensuales), ejemplo:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Si 50 visitantes acceden a mi página, es probable que dicha cuota se encuentre en, aproximadamente, un 10%. Esto indicaría que si accedieran otros 450 visitantes se completaría la cuota, llegando al 100%, y mi aplicación quedaría pausada hasta el reinicio de todas las cuotas (cada 24hs).&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Tiene cierta limitación en el almacenamiento de datos(500MB de espacio), ejemplo:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Si la cuota estándar (gratis) se limita a los 1000 MB de datos almacenados y nuestra aplicación alcanza dicha cantidad, podrá seguir recibiendo peticiones (si es que no se ha alcanzado el máximo de ésta cuota), pero no podrá continuar almacenando en la base de datos.&lt;/p&gt;
+
+&lt;p&gt;Para ello se puede contratar más de cantidad de visitas como de almacenamiento.&lt;/p&gt;
+
+&lt;h1&gt;Registro&lt;/h1&gt;
+
+&lt;p&gt;Antes de despleglar nuestra aplicación debemos de registrar nuestra aplicacion en &lt;a href=&quot;https://accounts.google.com/ServiceLogin?service=ah&amp;amp;passive=true&amp;amp;continue=https%3A%2F%2Fappengine.google.com%2F_ah%2Fconflogin%3Fcontinue%3Dhttps%3A%2F%2Fappengine.google.com%2F&amp;amp;ltmpl=ae&quot;&gt;appengine.google.com&lt;/a&gt;
+Una vez ingresado, presiona en el botón “Create Application”.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;&lt;img src=&quot;http://recursospython.com/wp-content/uploads/2013/10/4.png&quot; alt=&quot;GAE&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ahora procedemos a rellenar los campos teniendo en cuenta lo siguiente:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Application Identifier: dominio por el cual tendremos acceso a nuestra aplicación. Utiliza el botón “Check Availability” para verificar que esté disponible.&lt;/li&gt;
+&lt;li&gt;Application Title: título para la aplicación. No es muy relevante pero no puede ser cambiado. Te recomiendo un nombre en minúsculas y sin espacios.
+En los demás campos deja los valores por defecto.
+Por último presiona &amp;quot;Create Application&amp;quot;. Una vez creada, dirígete nuevamente a appengine.google.com y verás tu aplicación en la lista.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Ejecutar nuestra apliación en local&lt;/h1&gt;
+
+&lt;p&gt;Un paso muy importante antes de desplegar nuestra aplicación en el servidor de GAE, es desplegarla &amp;quot;Localmente&amp;quot;, para realizar las pertinentes pruebas y test de funcionamiento.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;Linux&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Si usamos  linux se realizaria de la siguiente manera en la terminal introduciendo estos comandos:&lt;/p&gt;
+
+&lt;p&gt;Iniciar el servidor de desarrollo local indica lo siguiente en la terminal:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  dev_appserver.py ubicacionapp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Por defecto el puerto 8080 será utilizado. Para cambiarlo, indica:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  dev_appserver.py --port=8081 ubicacionapp/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;Mac y Windows&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Mac y Windows cuentan con un &amp;quot;Laucher&amp;quot; para esta tarea, ambos &amp;quot;Laucher&amp;quot; son iguales así que realizaré la explicación en Mac.&lt;/p&gt;
+
+&lt;p&gt;Lo primero que debemos de hacer es instalar el &lt;a href=&quot;https://cloud.google.com/appengine/downloads&quot;&gt;SDK&lt;/a&gt;, en caso de no tenerlo instalado.&lt;/p&gt;
+
+&lt;p&gt;Una vez que lo tenemos instalado, vamos a crear el proyecto en con el &amp;quot;Laucher&amp;quot; que se nos ha instalado.&lt;/p&gt;
+
+&lt;p&gt;En mi caso yo uso Mac, así que simplemente tenemos que ejecutar el Launcher de GAE que hemos instalado.&lt;/p&gt;
+
+&lt;p&gt;Cuando se haya ejecutado le tenemos que dar al botón &amp;quot;+&amp;quot; que se encuentra en la parte inferior izquierda.&lt;/p&gt;
+
+&lt;p&gt;Cuando hayamos hecho eso, se nos abrirá una ventanita donde debemos de buscar la carpeta que contiene nuestro proyecto, y también debemos de especificar el nombre que le queremos poner al proyecto para hacer las pruebas en local.&lt;/p&gt;
+
+&lt;p&gt;Los siguientes puertos vienen por defecto:
++ Admin port
++ Port&lt;/p&gt;
+
+&lt;p&gt;pero nosotros podemos especificar los que queramos.&lt;/p&gt;
+
+&lt;p&gt;Cuando ya tengamos todo listo, le damos al botón &amp;quot;Create&amp;quot;, de esta manera el proyecto se nos creará y se añadira a la lista de proyectos.&lt;/p&gt;
+
+&lt;p&gt;Una vez realizados todos estos pasos, solo debemos de darle a botón &amp;quot;Run&amp;quot; y nuestro proyecto se ejecutará en local.&lt;/p&gt;
+
+&lt;p&gt;Ahora solo debemos de irnos a nuestro navegador y escribir:&lt;/p&gt;
+
+&lt;p&gt;localhost:8080&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;&lt;img src=&quot;http://i.imgur.com/bX9LexV.png&quot; alt=&quot;GAE&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;De esta manera se usaría en local nuestra aplicación y podreamos probar todo lo que queramos.&lt;/p&gt;
+
+&lt;h1&gt;Desplegar la aplicación definitivamente&lt;/h1&gt;
+
+&lt;p&gt;Una vez desarrollado la aplicación y testeado su funcionalidad en el servidor de desarrollo local, procederemos a desplegar
+la aplicación en Google. Para usuarios de Linux el procedimiento será vía consola. Para Windows y Mac OS X utilizaremos el &amp;quot;Launcher&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;Linux&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Abre la terminal y ejecuta:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;  appcfg.py --email=yo@gmail.com update ubicacionapp/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;La opción --email indica la cuenta de Google en la cual se encuentra registrada la aplicación. Si tu dirección es @gmail.com, éste puede omitirse (--email=yo).&lt;/li&gt;
+&lt;li&gt;Luego, será solicitada la contraseña.&lt;/li&gt;
+&lt;li&gt;ubicacionapp/ indica la carpeta o ruta en donde se encuentra el archivo app.yaml junto con los demás, pero este primero determinará la existencia de una aplicación en dicha ruta para appcfg.py.&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;En caso de haber especificado erróneamente la ubicación, se quejará diciendo:&lt;/p&gt;
+
+&lt;p&gt;appcfg.py: error: Directory does not contain an Documents.yaml configuration file.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;Mac y Windows&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Para este caso ejecutamos el &amp;quot;Laucher&amp;quot; y selecciona tu aplicación en la lista de aplicaciones. Luego, presiona el botón “Deploy” en la barra superior. La dirección de correo y contraseña serán solicitados. Al finalizar el proceso, la ventana “Delpoyment to Google” indicará que la misma puede ser cerrada.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;&lt;img src=&quot;http://i.imgur.com/LlyJ4F2.png&quot; alt=&quot;GAE&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;De esta manera, ya se encuentra nuestra aplicación en funcionamiento.
+&lt;a href=&quot;evenge-2014.appspot.com&quot;&gt;evenge-2014.appspot.com&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 02 Feb 2015 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/general/2015/02/02/Despliegue.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/general/2015/02/02/Despliegue.html</guid>
+        
+        <category>GAE</category>
+        
+        <category>Google App Engine</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        <category>Python</category>
+        
+        
+        <category>general</category>
+        
+      </item>
+    
+      <item>
+        <title>Uso de WebApp2 y Jinja2</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://webapp-improved.appspot.com/&quot;&gt;WeppApp2&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Tras darle muchas vueltas y deliberar, nos decidimos por usar el framework &amp;#39;Webapp2&amp;#39;, ya que al ser una aplicación medianamente sencilla, sin mucha carga, este framework nos facilitaría mucho su desarrollo. Ya que resultaba mucho más sencillo usar que &amp;#39;Django&amp;#39;.
+Además por lo leido, era ideal para sistemas virtualizados, así como para GAE.
+Como nosotros ibamos a programar en Python nos venia genial, porque ya viene integrado en el SDK de App Engine.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://jinja.pocoo.org/docs/dev/&quot;&gt;&lt;img src=&quot;http://www.pocoo.org/_images/jinja-logo.png&quot; alt=&quot;JINJA&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;También nos decidimos por usar Jinja2, que es una librería que nos permitia renderizar script en Python a una salida HTML de una forma muy simple y sencilla de aprender, es decir, saber estilo de python.&lt;/p&gt;
+
+&lt;p&gt;Lo primero que encontramos en su documentación es que Jinaj2 está inspirado en el sistema de plantillas de Django.&lt;/p&gt;
+
+&lt;p&gt;Jinja2 basicamente es un motor de plantillas que incorpora todas las funciones de Python.
+Tiene soporte completo unicode, un entorno de ejecución y seguridad incorporada.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 16 Dec 2014 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/general/2014/12/16/uso-de-webapp2-y-jinja2.html</guid>
+        
+        <category>Webapp2</category>
+        
+        <category>Jinja2</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        
+        <category>general</category>
+        
+      </item>
+    
+      <item>
+        <title>Nos decidimos por GAE</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/&quot;&gt;&lt;img src=&quot;http://cdn.pingwest.com/wp-content/uploads/2013/04/google-app-engine-logo.jpg&quot; alt=&quot;GAE&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Tras darle muchas vueltas y buscar diferentes alternativas a la hora de la elección del PaaS, nos hemos decidido por GAE, ya que uno de nuestros integrantes ya había trabajo con el con anterioridad, y la verdad, que por lo que nos había hablado de GAE era una maravilla. Como todo, tiene sus incombenientes, pero siempre se pueden subsanar de alguna manera.&lt;/p&gt;
+
+&lt;p&gt;GAE es un servicio que nos permite ejecutar nuestras aplicaciones web usando las infraestructuras de Google. A nosotros esta alternativa nos venia perfecta por el tipo de aplicación web que íbamos a desarrollar.&lt;/p&gt;
+
+&lt;p&gt;GAE nos da soporte para diferentes tipo de lenguajes:
++ Python
++ Java
++ Go
++ PHP(incorporado hace poco tiempo)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.python.org/&quot;&gt;&lt;img src=&quot;https://www.python.org/static/community_logos/python-logo-master-v3-TM-flattened.png&quot; alt=&quot;Python&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nosotros nos decidimos por Python, ya que en la asignatura DAI, nos empezaron a enseñar, y ya que estábamos aprendiendo, que mejor manera de hacerlo que desarrollando nuestra aplicación web en dicho lenguaje. Ya que python es un lenguaje muy potente actualmente.&lt;/p&gt;
+
+&lt;h3&gt;Algunas de las características más destacadas de GAE:&lt;/h3&gt;
+
+&lt;h4&gt;Almacenamiento de datos&lt;/h4&gt;
+
+&lt;p&gt;GAE nos da una un servicio de almacenamiento de datos distribuido muy potente. Conforme nuestra aplicación va creciendo, nuestro almacén de datos también lo hace.&lt;/p&gt;
+
+&lt;h4&gt;Servicios&lt;/h4&gt;
+
+&lt;p&gt;GAE nos facilita la forma de administrar nuestra aplicación.
++ Correo
++ Mencache
++ Extracción de URL&lt;/p&gt;
+
+&lt;h4&gt;Desarrollo local&lt;/h4&gt;
+
+&lt;p&gt;GAE nos permite generar un entorno de desarrollo local exactamente igual que si fuese GAE en la nube. De esta manera podrás probar tus aplicaciones con toda seguridad antes de subirlas definitivamente.&lt;/p&gt;
+
+&lt;h4&gt;Cron&lt;/h4&gt;
+
+&lt;p&gt;Además, nuestras aplicaciones pueden realizar tareas programadas según las configure el desarrollador.&lt;/p&gt;
+
+&lt;h4&gt;Python&lt;/h4&gt;
+
+&lt;p&gt;GAE nos permite como anteriormente he comentado, programar en Python. Además incluye varias API y herramientas de desarrollo muy fácil de usar.&lt;/p&gt;
+
+&lt;h4&gt;Cuotas&lt;/h4&gt;
+
+&lt;p&gt;GAE es gratis, y te ofrecen 500MB de espacio para tu applicación y admite 5 millones de visitas mensuales.&lt;/p&gt;
+
+&lt;h4&gt;Escalable&lt;/h4&gt;
+
+&lt;p&gt;Es altamente escalable, es una de las características de GAE, así como la estabilidad y la seguridad.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 16 Dec 2014 00:00:00 +0100</pubDate>
+        <link>http://evenge.github.io/general/2014/12/16/nos-decidimos-por-gae.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/general/2014/12/16/nos-decidimos-por-gae.html</guid>
+        
+        <category>GAE</category>
+        
+        <category>Google App Engine</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        <category>Python</category>
+        
+        
+        <category>general</category>
+        
+      </item>
+    
+  </channel>
+</rss>
