@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Documentar con PyDoc"
-description: "Cómo documentar las clases gracias a PyDoc"
+title: "Documentar en Python"
+description: "Cómo documentar de forma sencilla en Python"
 category: Documentación
 tags: [PyDoc, Python, Documentar python, Evenge, Gestor de eventos]
 ---
