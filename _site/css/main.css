@@ -254,7 +254,7 @@ body {
 
 .content {
   width: 100%;
-  max-width: 640px;
+  max-width: 840px;
   margin: 0 auto;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -279,6 +279,7 @@ body {
         text-decoration: none;
         color: #333332; }
         .content article .post-title a:hover {
+          color: #c11f23;
           text-decoration: none; }
     .content article .post-excerpt {
       letter-spacing: -0.02em;
@@ -295,6 +296,7 @@ body {
         color: #b3b3b1;
         text-decoration: none; }
         .content article .post-meta a:hover {
+          color: #c11f23;
           text-decoration: underline; }
 
 .container.featured {
@@ -710,7 +712,7 @@ body {
       text-decoration: none;
       cursor: pointer;
       height: 44px;
-      background: #57ad68;
+      background: #c11f23;
       color: #fff;
       vertical-align: middle;
       box-sizing: border-box;
