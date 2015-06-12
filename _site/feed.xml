@@ -5,15 +5,59 @@
     <description></description>
     <link>http://evenge.github.io/</link>
     <atom:link href="http://evenge.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 11 Jun 2015 21:27:52 +0200</pubDate>
-    <lastBuildDate>Thu, 11 Jun 2015 21:27:52 +0200</lastBuildDate>
+    <pubDate>Fri, 12 Jun 2015 23:32:44 +0200</pubDate>
+    <lastBuildDate>Fri, 12 Jun 2015 23:32:44 +0200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Testeo</title>
-        <description>&lt;h1&gt;Tests unitarios con Shippable y NoseGAE&lt;/h1&gt;
+        <title>Documentar con PyDoc</title>
+        <description>&lt;p&gt;Python ofrece un mecanismo sencillo para la documentación y es que si el primer bloque de la definición del objeto es una cadena de texto, ésta se asocia a la variable &lt;strong&gt;&lt;strong&gt;doc&lt;/strong&gt;&lt;/strong&gt; automáticamente.&lt;/p&gt;
 
-&lt;p&gt;Podemos consultar la documentación de &lt;a href=&quot;https://github.com/Trii/NoseGAE&quot;&gt;NoseGAE&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Tal y como podemos ver en el ejemplo de acontinuación, hay que instar justo depués de la definición de la función el comentario.&lt;/p&gt;
+
+&lt;p&gt;Empezamos por tres comillas, lo cuál significa que el comentario va a tener más de una línea, seguido por una breve explicación de que hace dicha función, sus argumentos y opcionalmente unos test de prueba, que habría que poner para ejecutarlo y la salida esperada.&lt;/p&gt;
+
+&lt;p&gt;Ejemplo:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sumar_dos_numeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;Suma dos números y retorna su resultado&lt;/span&gt;
+
+&lt;span class=&quot;sd&quot;&gt;    Argumentos:&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    a -- primer sumando&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    b -- segundo sumando&lt;/span&gt;
+
+&lt;span class=&quot;sd&quot;&gt;    Test:&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    &amp;gt;&amp;gt;&amp;gt; sumar_dos_numeros(25, 10)&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    35&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    &amp;gt;&amp;gt;&amp;gt; sumar_dos_numeros(30, 20)&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    50&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Fuente: &lt;a href=&quot;http://mundogeek.net/archivos/2008/07/07/documentacion-en-python/&quot;&gt;Mundogeek.net&lt;/a&gt;  &lt;/p&gt;
+</description>
+        <pubDate>Tue, 12 May 2015 00:00:00 +0200</pubDate>
+        <link>http://evenge.github.io/documentaci%C3%B3n/2015/05/12/Documentar-en-python.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/documentaci%C3%B3n/2015/05/12/Documentar-en-python.html</guid>
+        
+        <category>PyDoc</category>
+        
+        <category>Python</category>
+        
+        <category>Documentar python</category>
+        
+        <category>Evenge</category>
+        
+        <category>Gestor de eventos</category>
+        
+        
+        <category>documentación</category>
+        
+      </item>
+    
+      <item>
+        <title>Tests unitarios con Shippable y NoseGAE</title>
+        <description>&lt;p&gt;Podemos consultar la documentación de &lt;a href=&quot;https://github.com/Trii/NoseGAE&quot;&gt;NoseGAE&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Cuando Shipable, como ya hemos comentado, llega al apartado de ejecución de test, en nuestro caso del archivo test.py, procede a realizar los test unitarios de este módulo.
 En nuestro archivo podemos encontrar funciones como esta:&lt;/p&gt;

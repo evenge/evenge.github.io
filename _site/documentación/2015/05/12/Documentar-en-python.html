@@ -7,7 +7,7 @@
   <!-- (1) force latest IE rendering engine: bit.ly/1c8EiC9 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>Tests unitarios con Shippable y NoseGAE</title>
+  <title>Documentar con PyDoc</title>
   <meta name="description" content="" />
 
   <meta name="HandheldFriendly" content="True" />
@@ -15,7 +15,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="canonical" href="http://evenge.github.io/test/2015/02/02/testeo.html">
+  <link rel="canonical" href="http://evenge.github.io/documentaci%C3%B3n/2015/05/12/Documentar-en-python.html">
 
   <link rel="shortcut icon" href="/assets/images/favicon.ico">
 <!--  <link rel="stylesheet" href=""> -->
@@ -35,12 +35,12 @@
         
         <div class="noarticleimage">
           <div class="post-meta">
-            <h1 class="post-title">Tests unitarios con Shippable y NoseGAE</h1>
+            <h1 class="post-title">Documentar con PyDoc</h1>
             <div class="cf post-meta-text">
               <div class="author-image" style="background-image: url()">Blog Logo</div>
               <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person"></h4>
               on
-              <time datetime="2015-02-02T00:00:00+01:00">02 Feb 2015</time>
+              <time datetime="2015-05-12T00:00:00+02:00">12 May 2015</time>
               <!-- , tagged on <span class="post-tag-">, <a href="/tag/"></a></span> -->
             </div>
           </div>
@@ -54,76 +54,37 @@
             <span class="post-reading-time"></span> read
           </div>
           <a name="topofpage"></a>
-          <p>Podemos consultar la documentación de <a href="https://github.com/Trii/NoseGAE">NoseGAE</a>.</p>
+          <p>Python ofrece un mecanismo sencillo para la documentación y es que si el primer bloque de la definición del objeto es una cadena de texto, ésta se asocia a la variable <strong><strong>doc</strong></strong> automáticamente.</p>
 
-<p>Cuando Shipable, como ya hemos comentado, llega al apartado de ejecución de test, en nuestro caso del archivo test.py, procede a realizar los test unitarios de este módulo.
-En nuestro archivo podemos encontrar funciones como esta:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">  def test(self):
-  evenge = Evenge()
-  response = evenge.hazElCuadrado(4)
-  self.assertEqual(response,16)
+<p>Tal y como podemos ver en el ejemplo de acontinuación, hay que instar justo depués de la definición de la función el comentario.</p>
+
+<p>Empezamos por tres comillas, lo cuál significa que el comentario va a tener más de una línea, seguido por una breve explicación de que hace dicha función, sus argumentos y opcionalmente unos test de prueba, que habría que poner para ejecutarlo y la salida esperada.</p>
+
+<p>Ejemplo:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python">  <span class="k">def</span> <span class="nf">sumar_dos_numeros</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Suma dos números y retorna su resultado</span>
+
+<span class="sd">    Argumentos:</span>
+<span class="sd">    a -- primer sumando</span>
+<span class="sd">    b -- segundo sumando</span>
+
+<span class="sd">    Test:</span>
+<span class="sd">    &gt;&gt;&gt; sumar_dos_numeros(25, 10)</span>
+<span class="sd">    35</span>
+<span class="sd">    &gt;&gt;&gt; sumar_dos_numeros(30, 20)</span>
+<span class="sd">    50</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </code></pre></div>
-<p>oseGAE establece el entorno de desarrollo GAE antes de su prueba.
-Esto significa que usted puede escribir fácilmente test funcionales para su aplicación sin tener que arrancar realmente el servidor dev y ponerlo a prueba a través de HTTP.
-El plugin también configura e inicia una instancia TestBed, su application<em>id basa apagado su app.yaml , y establece los caminos adecuados utilizando dev</em>appserver.fix<em>sys</em>path ().</p>
-
-<p>Es una función básica que nos servirá de ejemplo, pero podemos ver como se trabaja.
-Simplemente es la comprobación de si la respuesta a una función dá el valor esperado.
-Si es así, el test es satisfactorio, de lo contrario, el test será fallido y Shippable no procederá al despliegue.</p>
-
-<p>Veamos una función que usamos en nuestro test.py:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">import unittest
-from google.appengine.ext import db
-from google.appengine.ext import testbed
-from index import Evenge
-from _oo.classes.ponente import Ponente
-from _oo.classes.evento import Evento
-
-class EvengeTestCase(unittest.TestCase):
-def setUp(self):
-self.testbed = testbed.Testbed()
-self.testbed.activate()
-self.testbed.init_datastore_v3_stub()
-
-def tearDown(self):
-self.testbed.deactivate()
-</code></pre></div>
-<p>Función de testeo que comprobará si es factible insertar un Ponente.
-  Sirve de utilidad para ver si hay conexión con DataStore y si la introducción de un ponente va a dar o no error.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def testInsertarPonente(self):
-  evenge = Evenge()
-  ponente = Ponente(
-    email = &quot;pepito@jemail.com&quot;,
-    telefono = &quot;sony xperia&quot;,
-    twitter = &quot;@pepitoG&quot;,
-    web = &quot;http://pepitoG.es&quot;
-  )
-  response = evenge.testPonente(ponente)
-  self.assertEqual(response,&#39;pepito@jemail.com&#39;)
-
-  if __name__ == &quot;__main__&quot;:
-    unittest.main()
-</code></pre></div>
-<h1>Funcion testPonente() de la clase Evenge</h1>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def testPonente(self, ponente):
-  ponente.put()
-  query = Ponente.query(Ponente.email == &#39;pepito@jemail.com&#39;)
-  email = query.email
-  query.delete
-  return email
-</code></pre></div>
-<p>Con este test, vemos si esta disponible el Datastore para poder insertar ponentes en este caso.
-Tenemos que tener en cuenta el importar los módulos necesarios para el test.</p>
-
-<p>A la hora de hacer el despliegue, cuando hacemos un push a la rama master de nuestro repo, Shippable ejecutará estos test, y nos devolverá los resultados de los casos.
-<img src="http://i58.tinypic.com/vwtp2x.png" alt=""></p>
+<p>Fuente: <a href="http://mundogeek.net/archivos/2008/07/07/documentacion-en-python/">Mundogeek.net</a>  </p>
 
         </section>
         <footer class="post-footer">
           <section class="share">
             
               
-                <a class="icon-twitter" href="http://twitter.com/share?text=Tests+unitarios+con+Shippable+y+NoseGAE&amp;url=http://evenge.github.io/test/2015/02/02/testeo"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Documentar+con+PyDoc&amp;url=http://evenge.github.io/documentaci%C3%B3n/2015/05/12/Documentar-en-python"
                   onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
                 <i class="fa fa-twitter"></i><span class="hidden">twitter</span>
                 </a>
@@ -141,7 +102,7 @@ Tenemos que tener en cuenta el importar los módulos necesarios para el test.</p
               <h4></h4>
               <p class="bio"></p>
               <hr>
-              <p class="published">Published <time datetime="2015-02-02 00:00">02 Feb 2015</time></p>
+              <p class="published">Published <time datetime="2015-05-12 00:00">12 May 2015</time></p>
             </section>
           </div>
           
