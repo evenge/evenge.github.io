@@ -5,9 +5,45 @@
     <description></description>
     <link>http://evenge.github.io/</link>
     <atom:link href="http://evenge.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 14 Jun 2015 12:20:33 +0200</pubDate>
-    <lastBuildDate>Sun, 14 Jun 2015 12:20:33 +0200</lastBuildDate>
+    <pubDate>Mon, 15 Jun 2015 18:00:06 +0200</pubDate>
+    <lastBuildDate>Mon, 15 Jun 2015 18:00:06 +0200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Primer clasificado en el Certamen de Proyectos Libres de la UGR 2014-2015.</title>
+        <description>&lt;h2&gt;¡ Lo hemos conseguido !&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Evenge&lt;/strong&gt; es el &lt;strong&gt;primer clasificado&lt;/strong&gt; del Certamen de Proyectos Libres organizado por la Universidad de Granada.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://evenge.github.io/assets/images/entradas/finalistas.jpeg&quot; alt=&quot;Primer clasificado en certamen de Proyectos Libres UGR&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Nos gustaría agradecer publicamente a la &lt;a href=&quot;http://osl.ugr.es&quot;&gt;Oficina de Sowftware Libre&lt;/a&gt; de la Universidad de Granada y a todos los participantes por hacer posibles este premio obtenido.  &lt;/p&gt;
+
+&lt;p&gt;Desde todo el equipo de evenge, &lt;strong&gt;GRACIAS&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;También darle la enhorabuena a los proyectos finalistas:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2º clasificado &lt;a href=&quot;https://github.com/demiurgosoft/dont-crush-my-castle&quot;&gt;Don&amp;#39;t touch my castle&lt;/a&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;3er clasificado &lt;a href=&quot;https://github.com/PabloCastellano/libreborme&quot;&gt;libreborme&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Agradecer también a todos los patrocinadores que han hecho que este certamen sea posible.&lt;/p&gt;
+
+&lt;p&gt;Y por último &lt;strong&gt;animar&lt;/strong&gt; a todos a volver a intentarlo el año que viene y a los que no hayan participado este, que no se pierdan esta gran oportuniad de aprender y crearte tu propio curriculum.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 15 Jun 2015 00:00:00 +0200</pubDate>
+        <link>http://evenge.github.io/premios/2015/06/15/primer-clasificado-certamen.html</link>
+        <guid isPermaLink="true">http://evenge.github.io/premios/2015/06/15/primer-clasificado-certamen.html</guid>
+        
+        <category>Evenge</category>
+        
+        <category>Certamen Proyectos Libres UGR</category>
+        
+        
+        <category>premios</category>
+        
+      </item>
     
       <item>
         <title>Final del certamen de Proyectos Libres de la UGR</title>
