@@ -9,7 +9,7 @@ tags: [Evenge, Certamen Proyectos Libres UGR]
 
 **Evenge** es el **primer clasificado** del Certamen de Proyectos Libres organizado por la Universidad de Granada.
 
-![Primer clasificado en certamen de Proyectos Libres UGR](http://evenge.github.io/assets/images/entradas/finalistas.jpeg)
+![Evenge, primer clasificado en certamen de Proyectos Libres de la UGR](http://evenge.github.io/assets/images/entradas/finalistas.jpeg)
 
 Nos gustaría agradecer publicamente a la [Oficina de Sowftware Libre](http://osl.ugr.es) de la Universidad de Granada y a todos los participantes por hacer posibles este premio obtenido.  
 
